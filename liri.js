@@ -2,12 +2,12 @@ var twitterAuth = require('./keys.js');
 var request = require('request');
 var twitter = require('twitter');
 var fs = require('fs');
-// var twitterUser = new twitter ({
-//     consumer_key: keys.twitterKeys.consumer_key,
-//     consumer_secret: keys.twitterKeys.consumer_secret,
-//     access_token_key: keys.twitterKeys.access_token_key,
-//     access_token_secret: keys.twitterKeys.access_token_secret
-// })
+var twitterUser = new twitter ({
+    consumer_key: keys.consumer_key,
+    consumer_secret: keys.consumer_secret,
+    access_token_key: keys.access_token_key,
+    access_token_secret: keys.access_token_secret
+});
 switch (process.argv[2]) {
     case 'movie-this':
         var omdb = require('omdb');
@@ -22,7 +22,7 @@ switch (process.argv[2]) {
         }
 
         omdb.get({ title: movieInput }, true, function(err, movie){
-            if(err) {
+            if(error) {
                 return console.error(err);
             }
             if(!movie) {
@@ -37,6 +37,24 @@ switch (process.argv[2]) {
         console.log('Actors: %s', movie.actors + '\n');
         console.log('Plot: %s', movie.plot);
         console.log("==============================================");
+        });
+        break;
+    case 'my-tweets':
+        var Twitter = require('twitter');
+        var params = { screen_name: 'juanitasoranno' };
+        client.get('statuses/user_timelines', params, function(error, tweets, response) {
+            if (!error){
+                for (i=0; i < tweets.length; i++) {
+                    console.log(JSON.stringify(tweets[i].text, null, 2));
+                    //console.log(JSON.stringify(tweets[i].created_at, null, 2));
+                    console.log('======================================================\n')
+                    if (i == 19) {
+                        break;
+                    }
+                }
+            } else{
+                console.log("Twitter Error. Try Again.");
+            }
         });
         break;
 }
