@@ -1,13 +1,13 @@
-var twitterAuth = require('./keys.js');
+var keys = require('./keys.js');
 var request = require('request');
-var twitter = require('twitter');
+var Twitter = require('twitter');
 var fs = require('fs');
-var twitterUser = new twitter ({
-    consumer_key: keys.consumer_key,
-    consumer_secret: keys.consumer_secret,
-    access_token_key: keys.access_token_key,
-    access_token_secret: keys.access_token_secret
-});
+// var twitterUser = new twitter ({
+//     consumer_key: keys.twitterKeys.consumer_key,
+//     consumer_secret: keys.twitterKeys.consumer_secret,
+//     access_token_key: keys.twitterKeys.access_token_key,
+//     access_token_secret: keys.twitterKeys.access_token_secret
+// });
 switch (process.argv[2]) {
     case 'movie-this':
         var omdb = require('omdb');
@@ -40,9 +40,9 @@ switch (process.argv[2]) {
         });
         break;
     case 'my-tweets':
-        var Twitter = require('twitter');
+        var client = new Twitter(keys.twitterKeys);
         var params = { screen_name: 'juanitasoranno' };
-        client.get('statuses/user_timelines', params, function(error, tweets, response) {
+        client.get('statuses/user_timeline', params, function(error, tweets, response) {
             if (!error){
                 for (i=0; i < tweets.length; i++) {
                     console.log(JSON.stringify(tweets[i].text, null, 2));
